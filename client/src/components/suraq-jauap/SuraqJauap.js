@@ -7,6 +7,7 @@ const SuraqJauap = ({ username }) => {
     const [score, setScore] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [passed, setPassed] = useState(false);
+    const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
 
     useEffect(() => {
         const fetchQuizzes = async () => {
@@ -36,25 +37,27 @@ const SuraqJauap = ({ username }) => {
         fetchProgress();
     }, [username]);
 
-    const handleAnswerChange = (quizIndex, questionIndex, optionIndex) => {
-        setAnswers({
-            ...answers,
+    const handleAnswerSelect = (quizIndex, questionIndex, optionIndex) => {
+        setAnswers((prevAnswers) => ({
+            ...prevAnswers,
             [quizIndex]: {
-                ...answers[quizIndex],
+                ...prevAnswers[quizIndex],
                 [questionIndex]: optionIndex,
             },
-        });
+        }));
     };
 
     const clearAnswer = (quizIndex, questionIndex) => {
-        const newAnswers = { ...answers };
-        if (newAnswers[quizIndex]) {
-            delete newAnswers[quizIndex][questionIndex];
-            if (Object.keys(newAnswers[quizIndex]).length === 0) {
-                delete newAnswers[quizIndex];
+        setAnswers((prevAnswers) => {
+            const newAnswers = { ...prevAnswers };
+            if (newAnswers[quizIndex]) {
+                delete newAnswers[quizIndex][questionIndex];
+                if (Object.keys(newAnswers[quizIndex]).length === 0) {
+                    delete newAnswers[quizIndex];
+                }
             }
-        }
-        setAnswers(newAnswers);
+            return newAnswers;
+        });
     };
 
     const handleSubmit = async (e, quizIndex) => {
@@ -74,15 +77,15 @@ const SuraqJauap = ({ username }) => {
         const scorePercentage = (correctCount / quiz.questions.length) * 100;
         setScore(scorePercentage);
         setShowResults(true);
-        setPassed(scorePercentage >= 70);
+        setShowCorrectAnswers(true);
+        const passed = scorePercentage >= 70;
+        setPassed(passed);
+
+        if (passed) {
+            alert("Жарайсың! Сен де барлығы дұрыс.");
+        }
 
         try {
-            console.log("Sending progress data:", {
-                username,
-                quizId: quiz._id,
-                level: quiz.level,
-                score: scorePercentage,
-            });
             const response = await fetch("http://localhost:8000/user/progress", {
                 method: "POST",
                 headers: {
@@ -101,6 +104,7 @@ const SuraqJauap = ({ username }) => {
                 setCurrentLevel(data.nextLevel);
                 setShowResults(false); // Reset results to load the new level
                 setAnswers({});
+                setShowCorrectAnswers(false);
             }
         } catch (error) {
             console.error("Failed to save progress:", error);
@@ -110,86 +114,92 @@ const SuraqJauap = ({ username }) => {
     const handleTryAgain = () => {
         setAnswers({});
         setShowResults(false);
+        setShowCorrectAnswers(false);
     };
 
     if (!quizzes.length) {
         return <div>Loading...</div>;
     }
 
+
     const currentQuiz = quizzes.find((quiz) => quiz.level === currentLevel);
 
     return (
-        <div>
-            <h1>Suraq Jauap Quizzes</h1>
-            {currentQuiz ? (
-                <div key={currentQuiz._id} className="quiz-block">
-                    <p>{currentQuiz.passage}</p>
-                    <form onSubmit={(e) => handleSubmit(e, quizzes.indexOf(currentQuiz))}>
-                        {!showResults && currentQuiz.questions.map((question, questionIndex) => (
-                            <div key={questionIndex} className="question-block">
-                                <p>{question.text}</p>
-                                <div className="options">
-                                    {question.options.map((option, optionIndex) => (
-                                        <div key={optionIndex}>
-                                            <label>
-                                                <input
-                                                    type="radio"
-                                                    name={`question-${currentQuiz._id}-${questionIndex}`}
-                                                    value={optionIndex}
-                                                    checked={answers[quizzes.indexOf(currentQuiz)]?.[questionIndex] === optionIndex}
-                                                    onChange={() => handleAnswerChange(quizzes.indexOf(currentQuiz), questionIndex, optionIndex)}
-                                                />
-                                                {option.text}
-                                            </label>
+        <div className="suraq content__body">
+            <div className="container">
+                <div className="suraq__inner">
+                    <h1 className="suraq__title title">SURAQ - JAUAP</h1>
+                    <div className="suraq-desc">
+                        <h2 className="suraq-desc__title">Level {currentQuiz.level}</h2>
+                        {currentQuiz ? (
+                            <div key={currentQuiz._id} className="quiz-block">
+                                <p className="suraq-desc__text">{currentQuiz.passage}</p>
+                                <div style={{ marginTop: "50px" }}>
+                                    <form onSubmit={(e) => handleSubmit(e, quizzes.indexOf(currentQuiz))}>
+                                        {!showResults && currentQuiz.questions.map((question, questionIndex) => (
+                                            <div key={questionIndex} className="question">
+                                                <h3 className="question__title">
+                                                    {questionIndex + 1 + ". " + question.text}
+                                                </h3>
+                                                <ul className="question__list">
+                                                    {question.options.map((option, optionIndex) => (
+                                                        <li key={optionIndex} className="question__item">
+                                                            <label
+                                                                className={`${
+                                                                    showCorrectAnswers
+                                                                        ? question.options[question.answer] === option
+                                                                            ? 'correct-answer'
+                                                                            : answers[quizzes.indexOf(currentQuiz)]?.[questionIndex] === optionIndex
+                                                                                ? 'incorrect-answer'
+                                                                                : ''
+                                                                        : ''
+                                                                }`}
+                                                            >
+                                                                <input
+                                                                    type="radio"
+                                                                    name={`question-${currentQuiz._id}-${questionIndex}`}
+                                                                    value={optionIndex}
+                                                                    checked={answers[quizzes.indexOf(currentQuiz)]?.[questionIndex] === optionIndex}
+                                                                    onChange={() => handleAnswerSelect(quizzes.indexOf(currentQuiz), questionIndex, optionIndex)}
+                                                                    disabled={showCorrectAnswers}
+                                                                />
+                                                                {option.text}
+                                                            </label>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                {answers[quizzes.indexOf(currentQuiz)]?.[questionIndex] !== undefined && (
+                                                    <button
+                                                        type="button"
+                                                        className="clear-button"
+
+                                                        onClick={() => clearAnswer(quizzes.indexOf(currentQuiz), questionIndex)}
+                                                    >
+                                                        Clear Selected Answer
+                                                    </button>
+                                                )}
+                                            </div>
+                                        ))}
+                                        {!showResults && <button className="button button_check" type="submit">Submit</button>}
+                                    </form>
+                                    {showResults && (
+                                        <div className="suraq__results">
+                                            <h2>Нәтиже</h2>
+                                            <p>{score.toFixed(2)}%</p>
+                                            {passed ? (
+                                                <p>Керемет, келесі деңгейге өттің...</p>
+                                            ) : (
+                                                <button className="button button_restart" onClick={handleTryAgain}>Қайтадан бастау</button>
+                                            )}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
-                                {answers[quizzes.indexOf(currentQuiz)]?.[questionIndex] !== undefined && (
-                                    <button
-                                        type="button"
-                                        className="clear-button"
-                                        onClick={() => clearAnswer(quizzes.indexOf(currentQuiz), questionIndex)}
-                                    >
-                                        Clear Selected Answer
-                                    </button>
-                                )}
                             </div>
-                        ))}
-                        {!showResults && <button type="submit">Submit</button>}
-                    </form>
-                    {showResults && (
-                        <div className="results">
-                            <h2>Results</h2>
-                            <p>Your Score: {score.toFixed(2)}%</p>
-                            {passed ? (
-                                <p>Excellent! Proceeding to next level...</p>
-                            ) : (
-                                <button onClick={handleTryAgain}>Try Again</button>
-                            )}
-                        </div>
-                    )}
+                        ) : (
+                            <p>No available quizzes at this level.</p>
+                        )}
+                    </div>
                 </div>
-            ) : (
-                <p>No available quizzes at this level.</p>
-            )}
-            <div className="levels">
-                <h2>Available Levels</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Level</th>
-                            <th>Passage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {quizzes.map((quiz) => (
-                            <tr key={quiz._id}>
-                                <td>{quiz.level}</td>
-                                <td>{quiz.passage}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// App.js
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Account from "./components/account/Account";
@@ -21,14 +22,25 @@ function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userData, setUserData] = useState({});
 
+    useEffect(() => {
+        const storedUserData = localStorage.getItem('userData');
+        if (storedUserData) {
+            const parsedUserData = JSON.parse(storedUserData);
+            setUserData(parsedUserData);
+            setIsAuthenticated(true);
+        }
+    }, []);
+
     const handleLogin = (userData) => {
         setIsAuthenticated(true);
         setUserData(userData);
+        localStorage.setItem('userData', JSON.stringify(userData));
     };
 
     const handleLogout = () => {
         setIsAuthenticated(false);
         setUserData({});
+        localStorage.removeItem('userData');
     };
 
     return (

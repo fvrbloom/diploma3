@@ -309,7 +309,6 @@ body {
   color: #C3C3C3;
 }
 
-/* SURAQ - JAUAP */
 .correct-answer {
   color: rgb(93, 206, 93);
   font-weight: bold;
@@ -339,7 +338,6 @@ body {
 
 .suraq-desc {
   width: 100%;
-  margin-bottom: 40px;
   padding: 30px 20px;
 
   font-family: "Roboto", sans-serif;
@@ -371,7 +369,7 @@ body {
 }
 
 .question__title {
-  margin-bottom: 20px;
+  margin:30px 0 10px;
   font-size: 20px;
   font-weight: 500;
 }
@@ -409,10 +407,12 @@ body {
   font-size: 16px;
 
   background: green;
+  margin-top: 30px;
 }
 
 .button_restart {
   padding: 8px 24px;
+  margin-top: 20px;
 
   color: white;
   font-size: 16px;
@@ -424,8 +424,6 @@ body {
 
   font-size: 16px;
 }
-
-
 /* SIGN UP */
 .signup::before{
   content: '';
@@ -543,38 +541,24 @@ body {
 
 /* ADMIN SURAQ JAUAP */
 .question-block {
-  margin-bottom: 20px;
-  padding: 10px;
+  margin-bottom: 30px;
+  padding: 20px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+}
+.question_admin_surjau{
+  margin-bottom: 20px;
+}
+.radio_but{
 }
 
 .options div {
   margin-bottom: 10px;
 }
 
-.admin-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-}
 
-.admin-button:hover {
-  background-color: #0056b3;
-}
 
-.delete-button {
-  background-color: #dc3545;
-}
-
-.delete-button:hover {
-  background-color: #c82333;
-}
 
 /* Clear Button */
 .clear-button {
@@ -680,19 +664,118 @@ body {
 .tanda_game_container{
   width: 90%;
 }
+.textarea_maqal{
+  font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    width:350px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+.news-form{
+  background-color: white;
+  padding: 24px 36px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  margin-bottom: 30px;
+}
+.button_admaq{
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
 
-.iframe-container {
-  position: relative;
-  width: 100px; /* Ширина видимой области, настроить по необходимости */
-  height: 100px; /* Высота видимой области, настроить по необходимости */
-  overflow: hidden;
+  background: linear-gradient(#A8ECEB, #F6D8E1);
+  border: 1px solid black;
+  border-radius: 20px;
+
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  display: block;
+}
+.admin-instructions {
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: #333;
+}
+.clear-button{
+  background: linear-gradient(#A8ECEB, #F6D8E1);
+  color: black;
+  text-decoration: none;
+  margin-top: 30px;
+  padding: 8px 24px;
+  font-size: 16px;
+}
+.adminsj-section{
+  background-color: white;
+  padding: 24px 36px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  margin-bottom: 30px;
+}
+.admin-button {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 13px;
+
+  background: linear-gradient(#A8ECEB, #F6D8E1);
+  border: 1px solid black;
+  border-radius: 20px;
+
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  margin-right: 10px;
+}
+.passage_admin{
+  margin-top: 20px;
+}
+.passage_textare{
+  width: 463px;
+  height: 150px;
 }
 
-#iframe-container iframe {
-  position: absolute;
-  width: 1000px; /* Увеличьте это значение, если нужно */
-  height: 1000px; /* Увеличьте это значение, если нужно */
-  top: -900px; /* Смещение вверх для показа нижней части */
-  left: -900px; /* Смещение влево для показа правой части */
+
+.tanda__image {
+  display: block;
+  width: 80%;
+  margin: 20px auto;
 }
 
+.tanda__button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tanda__text{
+  text-align: center;
+}
+.delete-button{
+  margin-top: 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #007bff;
+  cursor: pointer;
+}
+.profile__details{
+  max-width: 650px;
+  padding: 30px 20px;
+  margin: 0 auto;
+
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  text-align: center;
+
+  background:white;
+  border-radius: 10px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+.profile__email{
+  margin-top: 20px;
+}

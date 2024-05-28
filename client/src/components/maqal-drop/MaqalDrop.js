@@ -116,7 +116,7 @@ function MaqalDrop() {
           <h1 className='maqal__title title'>MAQAL DROP</h1>
           <div className="maqal-section">
             {news.length === 0 ? (
-              <p className='maqal-soz'>No news available</p>
+              <p className='maqal-soz'></p>
             ) : (
               news.map((article, index) => (
                 index <= currentLevel && (

@@ -71,33 +71,37 @@ const AdminSuraqJauap = () => {
     };
 
     return (
-        <div>
-            <h1>Admin Suraq Jauap</h1>
-            {level && <p> New level: {level+1}</p>}
+    <div className="AdminSJ content__body">
+        <div className="container">
+            <div className="suraq__inner">
+                <h1 className="suraq-desc__title title">SOZ JUMBAQ</h1>
+                
+                <div className="adminsj-section">
+                    
+            {level && <p className="newlevel_sj"> New level: {level+1}</p>}
             <button onClick={() => setShowForm(!showForm)} className="admin-button">
                 {showForm ? "Hide Form" : "Add Level"}
             </button>
             {showForm && (
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>Passage:</label>
-                        <textarea
+                    <div className="passage_admin">
+                        <textarea className="passage_textare"
                             value={passage}
                             onChange={handlePassageChange}
                             rows="4"
                             cols="50"
-                            placeholder="Enter the passage here..."
+                            placeholder="Enter the text for Suraq-Jauap..."
                             required
                         />
                     </div>
                     {questions.map((question, questionIndex) => (
                         <div key={questionIndex} className="question-block">
-                            <label>Question {questionIndex + 1}:</label>
-                            <input
+                            <label className="lab_question">Question {questionIndex + 1}:</label>
+                            <input className="question_admin_surjau"
                                 type="text"
                                 value={question.text}
                                 onChange={(e) => handleQuestionChange(questionIndex, e)}
-                                placeholder={`Enter question ${questionIndex + 1}`}
+                                placeholder={`   Enter question ${questionIndex + 1}`}
                                 required
                             />
                             <div className="options">
@@ -108,10 +112,10 @@ const AdminSuraqJauap = () => {
                                             type="text"
                                             value={option}
                                             onChange={(e) => handleOptionChange(questionIndex, optionIndex, e)}
-                                            placeholder={`Enter option ${optionIndex + 1}`}
+                                            placeholder={`    Enter option ${optionIndex + 1}`}
                                             required
                                         />
-                                        <input
+                                        <input className="radio_but"
                                             type="radio"
                                             name={`correctOption-${questionIndex}`}
                                             checked={question.correctOption === optionIndex}
@@ -121,7 +125,7 @@ const AdminSuraqJauap = () => {
                                     </div>
                                 ))}
                             </div>
-                            <button type="button" className="admin-button delete-button" onClick={() => deleteQuestion(questionIndex)}>Delete Question</button>
+                            <button type="button" className="admin-buttons delete-button" onClick={() => deleteQuestion(questionIndex)}>Delete Question</button>
                         </div>
                     ))}
                     <button type="button" className="admin-button" onClick={addQuestion}>Add Question</button>
@@ -129,7 +133,10 @@ const AdminSuraqJauap = () => {
                 </form>
             )}
         </div>
-    );
+        </div>
+        </div>
+    </div>
+);
 };
 
 export default AdminSuraqJauap;

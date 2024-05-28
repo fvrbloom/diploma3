@@ -1,3 +1,4 @@
+// SignUp.js
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
@@ -43,8 +44,10 @@ function SignUp({ onLogin }) {
             if (res.data === "exist") {
                 setErrorMessage("User already exists");
             } else if (res.data === "notexist") {
-                onLogin({ username, email });
-                navigate("/home", { state: { id: email } });
+                const userData = { username, email };
+                localStorage.setItem('userData', JSON.stringify(userData));
+                onLogin(userData);
+                navigate("/home");
             } else {
                 setErrorMessage("Sign up failed");
             }
